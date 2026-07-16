@@ -1,0 +1,517 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>SlideCore — a dependency-free JS carousel</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap"
+            rel="stylesheet"
+        />
+        <link rel="stylesheet" href="./src/SlideCore.css" />
+        <link rel="stylesheet" href="./assets/style.css" />
+    </head>
+    <body>
+        <div class="wrap">
+            <nav class="site-nav">
+                <a href="#" class="logo">SlideCore</a>
+                <div class="links">
+                    <a href="#install">Install</a>
+                    <a href="#options">Options</a>
+                    <a href="#playground">Playground</a>
+                    <a
+                        href="https://github.com/qimiMasterD/SlideCore"
+                        target="_blank"
+                        >GitHub</a
+                    >
+                </div>
+                <a href="#install" class="cta">Get SlideCore</a>
+            </nav>
+
+            <header class="hero">
+                <div class="eyebrow">vanilla js · zero dependencies · ~3kb</div>
+                <h1>Slide<span>Core</span></h1>
+                <p class="lede">
+                    A small, dependency-free carousel engine. One constructor,
+                    an options object you already understand, and the exact
+                    behavior you asked for — looped, paged, autoplaying, or
+                    plain.
+                </p>
+            </header>
+
+            <div class="filmstrip">
+                <div class="sprockets top">
+                    <span></span><span></span><span></span><span></span
+                    ><span></span> <span></span><span></span><span></span
+                    ><span></span><span></span>
+                </div>
+                <div id="hero-slide" class="demo-frame">
+                    <div class="scene">
+                        <span class="num">01</span
+                        ><span class="label">Scene one</span>
+                    </div>
+                    <div class="scene">
+                        <span class="num">02</span
+                        ><span class="label">Scene two</span>
+                    </div>
+                    <div class="scene">
+                        <span class="num">03</span
+                        ><span class="label">Scene three</span>
+                    </div>
+                    <div class="scene">
+                        <span class="num">04</span
+                        ><span class="label">Scene four</span>
+                    </div>
+                    <div class="scene">
+                        <span class="num">05</span
+                        ><span class="label">Scene five</span>
+                    </div>
+                    <div class="scene">
+                        <span class="num">06</span
+                        ><span class="label">Scene six</span>
+                    </div>
+                </div>
+                <div class="sprockets bottom">
+                    <span></span><span></span><span></span><span></span
+                    ><span></span> <span></span><span></span><span></span
+                    ><span></span><span></span>
+                </div>
+            </div>
+
+            <!-- ===================== INSTALL ===================== -->
+            <section id="install">
+                <div class="section-head">
+                    <span class="tag">Get SlideCore</span>
+                    <h2>Two ways to bring it in</h2>
+                    <p>
+                        Pick whichever fits your setup. No build step, no peer
+                        dependencies.
+                    </p>
+                </div>
+                <div class="install-grid">
+                    <div class="install-card">
+                        <div class="install-title">
+                            <span class="dot"></span>CDN (jsDelivr)
+                        </div>
+                        <div class="copy-box">
+                            <pre id="cp-cdn">
+&lt;link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/yourname/slidecore@main/src/SlideCore.css"&gt;
+&lt;script src="https://cdn.jsdelivr.net/gh/yourname/slidecore@main/src/SlideCore.js"&gt;&lt;/script&gt;</pre
+                            >
+                            <button class="copy-btn" data-target="cp-cdn">
+                                Copy
+                            </button>
+                        </div>
+                        <p class="install-note">
+                            Serves straight from the GitHub repo — no publish
+                            step needed.
+                        </p>
+                    </div>
+                    <div class="install-card">
+                        <div class="install-title">
+                            <span class="dot"></span>GitHub
+                        </div>
+                        <div class="copy-box">
+                            <pre id="cp-gh">
+git clone https://github.com/qimiMasterD/SlideCore.git</pre
+                            >
+                            <button class="copy-btn" data-target="cp-gh">
+                                Copy
+                            </button>
+                        </div>
+                        <p class="install-note">
+                            Or grab the
+                            <a
+                                href="https://github.com/qimiMasterD/SlideCore/tags"
+                                >latest release</a
+                            >
+                            as a zip.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ===================== QUICKSTART ===================== -->
+            <section class="quickstart">
+                <div class="section-head">
+                    <span class="tag">Quickstart</span>
+                    <h2>Three steps, no configuration required</h2>
+                    <p>
+                        Wrap your slides in a container, link the two files, and
+                        construct.
+                    </p>
+                </div>
+                <div class="code-block">
+                    <div class="code-block__bar">
+                        <span class="dot"></span><span class="dot"></span
+                        ><span class="dot"></span>
+                        <span>index.html</span>
+                    </div>
+                    <pre><span class="tok-com">&lt;!-- 1. Wrap your slides in a container --&gt;</span>
+<span class="tok-kw">&lt;div</span> id=<span class="tok-str">"slide"</span><span class="tok-kw">&gt;</span>
+  <span class="tok-kw">&lt;div&gt;</span>Slide 1<span class="tok-kw">&lt;/div&gt;</span>
+  <span class="tok-kw">&lt;div&gt;</span>Slide 2<span class="tok-kw">&lt;/div&gt;</span>
+  <span class="tok-kw">&lt;div&gt;</span>Slide 3<span class="tok-kw">&lt;/div&gt;</span>
+<span class="tok-kw">&lt;/div&gt;</span>
+
+<span class="tok-com">&lt;!-- 2. Link the library --&gt;</span>
+<span class="tok-kw">&lt;link</span> rel=<span class="tok-str">"stylesheet"</span> href=<span class="tok-str">"./src/SlideCore.css"</span><span class="tok-kw">&gt;</span>
+<span class="tok-kw">&lt;script</span> src=<span class="tok-str">"./src/SlideCore.js"</span><span class="tok-kw">&gt;&lt;/script&gt;</span>
+
+<span class="tok-com">&lt;!-- 3. Construct it --&gt;</span>
+<span class="tok-tag">&lt;script&gt;</span>
+  <span class="tok-kw">const</span> mySlider = <span class="tok-kw">new</span> SlideCore(<span class="tok-str">"#slide"</span>, {
+    items: 1,
+    loop: true,
+    autoplay: true,
+  });
+<span class="tok-tag">&lt;/script&gt;</span></pre>
+                </div>
+            </section>
+
+            <!-- ===================== OPTIONS ===================== -->
+            <section id="options">
+                <div class="section-head">
+                    <span class="tag">Reference</span>
+                    <h2>Every option, straight from the source</h2>
+                    <p>
+                        These are exactly the defaults declared in
+                        <code>SlideCore.js</code>.
+                    </p>
+                </div>
+
+                <div class="options-groups">
+                    <div class="options-group">
+                        <h3>Layout</h3>
+                        <table class="options-table">
+                            <tr>
+                                <td>items</td>
+                                <td>1</td>
+                                <td>
+                                    Number of slides visible in the viewport at
+                                    once.
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>slideBy</td>
+                                <td>1</td>
+                                <td>
+                                    Slides moved per navigation click. Pass
+                                    <code>"page"</code> to move by however many
+                                    are visible.
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <div class="options-group">
+                        <h3>Motion</h3>
+                        <table class="options-table">
+                            <tr>
+                                <td>speed</td>
+                                <td>300</td>
+                                <td>
+                                    Transition duration in milliseconds when the
+                                    slide changes.
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>loop</td>
+                                <td>false</td>
+                                <td>
+                                    Wraps back to the first slide after the
+                                    last, and vice versa.
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>autoplay</td>
+                                <td>false</td>
+                                <td>
+                                    Advances the slider automatically without
+                                    user input.
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>autoplayTimeout</td>
+                                <td>3000</td>
+                                <td>
+                                    Delay in milliseconds between automatic
+                                    transitions.
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>autoplayHoverPause</td>
+                                <td>true</td>
+                                <td>
+                                    Pauses autoplay while the pointer is over
+                                    the carousel.
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <div class="options-group">
+                        <h3>UI</h3>
+                        <table class="options-table">
+                            <tr>
+                                <td>nav</td>
+                                <td>true</td>
+                                <td>
+                                    Shows pagination dots below the carousel.
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>controls</td>
+                                <td>true</td>
+                                <td>Shows previous/next buttons.</td>
+                            </tr>
+                            <tr>
+                                <td>controlsText</td>
+                                <td>["&lt;", "&gt;"]</td>
+                                <td>
+                                    Label or HTML rendered inside the
+                                    auto-generated prev/next buttons.
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>prevButton / nextButton</td>
+                                <td>null</td>
+                                <td>
+                                    Selector for your own button elements, if
+                                    you'd rather not use the generated ones.
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ===================== PLAYGROUND ===================== -->
+            <section id="playground">
+                <div class="section-head">
+                    <span class="tag">Playground</span>
+                    <h2>Common configurations</h2>
+                    <p>
+                        Each one is the exact options object shown next to it —
+                        copy, tweak, done.
+                    </p>
+                </div>
+
+                <div class="playground-item">
+                    <div class="ph-head">
+                        <h3>Basic, single slide</h3>
+                        <span class="ph-desc"
+                            >No loop, no autoplay — just prev/next and
+                            dots.</span
+                        >
+                    </div>
+                    <div class="playground-grid">
+                        <div class="filmstrip">
+                            <div class="sprockets top">
+                                <span></span><span></span><span></span
+                                ><span></span><span></span><span></span>
+                            </div>
+                            <div id="pg-basic" class="demo-frame">
+                                <div class="scene scene--sm">
+                                    <span class="num">01</span
+                                    ><span class="label">Intro</span>
+                                </div>
+                                <div class="scene scene--sm">
+                                    <span class="num">02</span
+                                    ><span class="label">Setup</span>
+                                </div>
+                                <div class="scene scene--sm">
+                                    <span class="num">03</span
+                                    ><span class="label">Payoff</span>
+                                </div>
+                            </div>
+                            <div class="sprockets bottom">
+                                <span></span><span></span><span></span
+                                ><span></span><span></span><span></span>
+                            </div>
+                        </div>
+                        <div class="code-block">
+                            <div class="code-block__bar">
+                                <span class="dot"></span><span>basic.js</span>
+                            </div>
+                            <pre><span class="tok-kw">new</span> SlideCore(<span class="tok-str">"#pg-basic"</span>, {
+  items: 1,
+});</pre>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="playground-item">
+                    <div class="ph-head">
+                        <h3>Multi-item, looped, autoplaying</h3>
+                        <span class="ph-desc"
+                            >Two slides at a time, wraps seamlessly, advances on
+                            its own.</span
+                        >
+                    </div>
+                    <div class="playground-grid">
+                        <div class="filmstrip">
+                            <div class="sprockets top">
+                                <span></span><span></span><span></span
+                                ><span></span><span></span><span></span>
+                            </div>
+                            <div id="pg-loop" class="demo-frame">
+                                <div class="scene scene--sm">
+                                    <span class="num">01</span
+                                    ><span class="label">Frame</span>
+                                </div>
+                                <div class="scene scene--sm">
+                                    <span class="num">02</span
+                                    ><span class="label">Frame</span>
+                                </div>
+                                <div class="scene scene--sm">
+                                    <span class="num">03</span
+                                    ><span class="label">Frame</span>
+                                </div>
+                                <div class="scene scene--sm">
+                                    <span class="num">04</span
+                                    ><span class="label">Frame</span>
+                                </div>
+                                <div class="scene scene--sm">
+                                    <span class="num">05</span
+                                    ><span class="label">Frame</span>
+                                </div>
+                                <div class="scene scene--sm">
+                                    <span class="num">06</span
+                                    ><span class="label">Frame</span>
+                                </div>
+                            </div>
+                            <div class="sprockets bottom">
+                                <span></span><span></span><span></span
+                                ><span></span><span></span><span></span>
+                            </div>
+                        </div>
+                        <div class="code-block">
+                            <div class="code-block__bar">
+                                <span class="dot"></span><span>loop.js</span>
+                            </div>
+                            <pre><span class="tok-kw">new</span> SlideCore(<span class="tok-str">"#pg-loop"</span>, {
+  items: 2,
+  loop: true,
+  slideBy: 2,
+  autoplay: true,
+  autoplayTimeout: 1500,
+  autoplayHoverPause: true, 
+});</pre>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="playground-item">
+                    <div class="ph-head">
+                        <h3>Custom buttons, no dots</h3>
+                        <span class="ph-desc"
+                            >Your own elements, wired via
+                            <code>prevButton</code> /
+                            <code>nextButton</code>.</span
+                        >
+                    </div>
+                    <div class="playground-grid">
+                        <div class="filmstrip">
+                            <div class="sprockets top">
+                                <span></span><span></span><span></span
+                                ><span></span><span></span><span></span>
+                            </div>
+                            <div id="pg-custom" class="demo-frame">
+                                <div class="scene scene--sm">
+                                    <span class="num">01</span
+                                    ><span class="label">Take</span>
+                                </div>
+                                <div class="scene scene--sm">
+                                    <span class="num">02</span
+                                    ><span class="label">Take</span>
+                                </div>
+                                <div class="scene scene--sm">
+                                    <span class="num">03</span
+                                    ><span class="label">Take</span>
+                                </div>
+                                <div class="scene scene--sm">
+                                    <span class="num">04</span
+                                    ><span class="label">Take</span>
+                                </div>
+                            </div>
+                            <div class="custom-controls">
+                                <button id="pg-custom-prev">Back</button>
+                                <button id="pg-custom-next">Next</button>
+                            </div>
+                        </div>
+                        <div class="code-block">
+                            <div class="code-block__bar">
+                                <span class="dot"></span><span>custom.js</span>
+                            </div>
+                            <pre><span class="tok-kw">new</span> SlideCore(<span class="tok-str">"#pg-custom"</span>, {
+  items: 1,
+  nav: false,
+  prevButton: <span class="tok-str">"#pg-custom-prev"</span>,
+  nextButton: <span class="tok-str">"#pg-custom-next"</span>,
+});</pre>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <footer>
+                <span>SlideCore</span>
+                <span
+                    ><a href="https://github.com/qimiMasterD/SlideCore"
+                        >https://github.com/qimiMasterD/SlideCore</a
+                    ></span
+                >
+            </footer>
+        </div>
+
+        <script src="./src/SlideCore.js"></script>
+        <script>
+            new SlideCore("#hero-slide", {
+                items: 2,
+                loop: true,
+                slideBy: 2,
+                autoplay: true,
+                autoplayTimeout: 2200,
+            });
+
+            new SlideCore("#pg-basic", {
+                items: 1,
+            });
+
+            new SlideCore("#pg-loop", {
+                items: 2,
+                loop: true,
+                slideBy: 2,
+                autoplay: true,
+                autoplayTimeout: 1500,
+            });
+
+            new SlideCore("#pg-custom", {
+                items: 1,
+                nav: false,
+                prevButton: "#pg-custom-prev",
+                nextButton: "#pg-custom-next",
+            });
+
+            // copy-to-clipboard for install snippets
+            document.querySelectorAll(".copy-btn").forEach((btn) => {
+                btn.addEventListener("click", async () => {
+                    const text = document.getElementById(
+                        btn.dataset.target,
+                    ).innerText;
+                    try {
+                        await navigator.clipboard.writeText(text);
+                        const original = btn.textContent;
+                        btn.textContent = "Copied";
+                        setTimeout(() => (btn.textContent = original), 1500);
+                    } catch (err) {
+                        console.error("Copy failed:", err);
+                    }
+                });
+            });
+        </script>
+    </body>
+</html>

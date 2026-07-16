@@ -1,0 +1,196 @@
+function SlideCore(selector, options) {
+    // Default options
+    const defaults = {
+        items: 1, // Number of items visible in the viewport
+        speed: 300, // Animation duration when changing slides (milliseconds)
+        loop: false, // Restart from the first slide after reaching the last
+        nav: true, // Display pagination indicators (dots)
+        controls: true, // Display previous and next navigation buttons
+        controlsText: ["<", ">"], // Text or HTML for the previous and next buttons
+        prevButton: null, // Custom previous button element (null = auto-generated)
+        nextButton: null, // Custom next button element (null = auto-generated)
+        slideBy: 1, // Number of items to move per navigation ("page" = move by visible items)
+        autoplay: false, // Automatically advance slides
+        autoplayTimeout: 3000, // Delay between automatic slide transitions (milliseconds)
+        autoplayHoverPause: true, // Pause autoplay while the mouse is hovering over the carousel
+    };
+    Object.assign(this, defaults, options);
+    // Initialiaztion
+    this.container = document.querySelector(selector);
+    if (!this.container) {
+        console.error(`SlideCore: container ${selector} does not exists`);
+        return;
+    }
+
+    this.container.classList.add("SlideCore-wrapper");
+    this.slides = Array.from(this.container.children);
+    this.showNav = this.items <= this.slides.length;
+    this.slideBy = this.slideBy === "page" ? this.items : this.slideBy;
+
+    this._createContent();
+    this._createTrack();
+
+    if (this.controls && this.showNav) this._createControls();
+    if (this.nav && this.showNav) this._createNav();
+
+    this.activeSlide = this.loop === true ? this._getClones() : 0;
+    this._activateSlide();
+
+    if (this.autoplay) this._startAutoplay();
+}
+
+SlideCore.prototype._startAutoplay = function () {
+    if (this.autoplaySlide) return;
+
+    this.autoplaySlide = setInterval(() => {
+        this.moveSlide(this.slideBy);
+    }, this.autoplayTimeout);
+};
+
+SlideCore.prototype._stopAutoplay = function () {
+    clearInterval(this.autoplaySlide);
+    this.autoplaySlide = null;
+};
+
+SlideCore.prototype._getClones = function () {
+    if (!this.showNav) return 0;
+    return this.items + this.slideBy - 1;
+};
+
+SlideCore.prototype._createContent = function () {
+    this.content = document.createElement("div");
+    this.content.className = "SlideCore-content";
+    this.container.appendChild(this.content);
+
+    if (this.autoplay && this.autoplayHoverPause) {
+        this.content.addEventListener("mouseover", () => {
+            this._stopAutoplay();
+        });
+        this.content.addEventListener("mouseout", () => {
+            this._startAutoplay();
+        });
+    }
+};
+
+SlideCore.prototype._createTrack = function () {
+    this.track = document.createElement("div");
+    this.track.classList.add("SlideCore-track");
+    this.numSlide = this.slides.length;
+    if (this.loop) {
+        const cloneHead = [];
+        let cursor = this.numSlide - 1;
+        for (let i = 0; i < this._getClones(); i++) {
+            cloneHead.unshift(this.slides[cursor].cloneNode(true));
+            cursor--;
+            if (cursor < 0) cursor = this.numSlide - 1;
+        }
+        const cloneTail = [];
+        cursor = 0;
+        for (let i = 0; i < this._getClones(); i++) {
+            cloneTail.push(this.slides[cursor].cloneNode(true));
+            cursor++;
+            if (cursor == this.numSlide) cursor = 0;
+        }
+        this.slides = cloneHead.concat(this.slides.concat(cloneTail));
+    }
+    this.slides.forEach((slide) => {
+        slide.classList.add("SlideCore-slide");
+        slide.style.flexBasis = `${100 / this.items}%`;
+        this.track.appendChild(slide);
+    });
+    this.content.appendChild(this.track);
+};
+
+SlideCore.prototype._createControls = function () {
+    const prevBtn = this.prevButton
+        ? document.querySelector(this.prevButton)
+        : document.createElement("button");
+    const nextBtn = this.nextButton
+        ? document.querySelector(this.nextButton)
+        : document.createElement("button");
+
+    if (!this.prevButton) {
+        prevBtn.classList.add("SlideCore-prev");
+        prevBtn.innerText = this.controlsText[0];
+        this.content.appendChild(prevBtn);
+    }
+    if (!this.nextButton) {
+        nextBtn.classList.add("SlideCore-next");
+        nextBtn.innerText = this.controlsText[1];
+        this.content.appendChild(nextBtn);
+    }
+
+    prevBtn.onclick = () => this.moveSlide(-this.slideBy);
+    nextBtn.onclick = () => this.moveSlide(this.slideBy);
+};
+
+SlideCore.prototype._createNav = function () {
+    this.navWrapper = document.createElement("div");
+    this.navWrapper.className = "SlideCore-nav";
+
+    this.pageCount = Math.ceil(this.numSlide / this.items);
+    for (let i = 0; i < this.pageCount; i++) {
+        const dot = document.createElement("button");
+        dot.className = "SlideCore-dot";
+
+        dot.onclick = () => {
+            this.activeSlide =
+                (this.loop ? this._getClones() : 0) + i * this.items;
+            this._activateSlide();
+        };
+
+        if (i == 0) dot.classList.add("active");
+        this.navWrapper.appendChild(dot);
+    }
+
+    this.container.appendChild(this.navWrapper);
+};
+
+SlideCore.prototype._updateNav = function (index = this.activeSlide) {
+    if (!this.showNav) return;
+    let realIndex = index;
+    if (this.loop)
+        realIndex = (index - this._getClones() + this.numSlide) % this.numSlide;
+    const pageIndex = Math.floor(realIndex / this.items);
+    Array.from(this.navWrapper.children).forEach((dot, index) => {
+        dot.classList.toggle("active", index === pageIndex);
+    });
+};
+
+SlideCore.prototype._activateSlide = function (instant = false) {
+    this.track.style.transition = instant
+        ? "none"
+        : `transform ${this.speed / 1000}s ease`;
+    this.offset = -this.activeSlide * (100 / this.items);
+    this.track.style.transform = `translateX(${this.offset}%)`;
+    if (!instant) this._updateNav();
+};
+
+SlideCore.prototype.moveSlide = function (step) {
+    if (this._isAnimating) return;
+    this._isAnimating = true;
+
+    const tmp = this.activeSlide;
+    this.activeSlide = Math.min(
+        Math.max(0, this.activeSlide + step),
+        this.slides.length - this.items,
+    );
+
+    setTimeout(() => {
+        if (this.loop) {
+            if (
+                this.activeSlide >= this.numSlide + this._getClones() ||
+                this.activeSlide < this._getClones()
+            ) {
+                this.activeSlide +=
+                    this.activeSlide < this._getClones()
+                        ? this.numSlide
+                        : -this.numSlide;
+                this._activateSlide(true);
+            }
+        }
+        this._isAnimating = false;
+    }, this.speed);
+
+    this._activateSlide();
+};

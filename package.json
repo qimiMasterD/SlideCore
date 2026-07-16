@@ -1,0 +1,9 @@
+{
+    "scripts": {
+        "minify": "terser src/SlideCore.js -o SlideCore.min.js && csso src/SlideCore.css -o SlideCore.min.css"
+    },
+    "dependencies": {
+        "csso-cli": "^4.0.2",
+        "terser": "^5.48.0"
+    }
+}

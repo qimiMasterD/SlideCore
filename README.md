@@ -152,7 +152,3 @@ SlideCore/
 ## Browser support
 
 Any browser with Flexbox and ES6 class support. No polyfills included.
-
-## License
-
-MIT
